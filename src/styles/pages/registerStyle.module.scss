@@ -32,6 +32,7 @@
           font-size: 14px;
           border-color: #9EA0A5;
           border-radius: 8px;
+          caret-color: #7E98DF;
         }
       
         input:focus {
@@ -49,11 +50,6 @@
           border-color: #7E98DF;
           box-shadow: 5px 5px 10px #d9d9d9,
               -5px -5px 10px #e7e7e7;
-        }
-  
-        button:hover {
-          background-color: #39B3CA;
-          border-color: #39B3CA;
         }
       }
   
