@@ -1,8 +1,26 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '@/styles/Home.module.css'
+/* eslint-disable @next/next/no-img-element */
+import Head from "next/head";
+import React from "react";
+import style from "@/styles/pages/homeStyle.module.scss";
+import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
+import AddIcon from "@mui/icons-material/Add";
+import {
+  Grid,
+  Typography,
+  TextField,
+  InputAdornment,
+  List,
+  ListItem,
+  ListItemAvatar,
+  Avatar,
+  ListItemText,
+} from "@mui/material";
+import { Box, Container } from "@mui/system";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 export default function Home() {
+  const [isClicked, setIsClicked] = React.useState(false);
+
   return (
     <>
       <Head>
@@ -11,9 +29,253 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        
+      <main className={style.main}>
+        <section className={`container-fluid ${style.container}`}>
+          <div className={`row p-0`}>
+            {/* CHAT LIST */}
+            <div className={`col-3 ${style.leftSide}`}>
+              {/* APPLICATION NAME AND BUTTON MODAL */}
+              <div className={`row ${style.rowTop}`}>
+                {/* APPLICATION NAME */}
+                <div className={`col-9 ${style.appName}`}>
+                  <h3>Message App</h3>
+                </div>
+                {/* BUTTON MODAL */}
+                <div className={`col-3 text-end ${style.btnModal}`}>
+                  <div className="btn-group">
+                    <button
+                      type="button"
+                      className="btn"
+                      data-bs-toggle="dropdown"
+                      data-bs-display="static"
+                      aria-expanded="false"
+                    >
+                      <FormatAlignLeftIcon
+                        sx={{ color: "white", fontSize: "25px" }}
+                      />
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-lg-end">
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Menu item
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Menu item
+                        </a>
+                      </li>
+                      <li>
+                        <a className="dropdown-item" href="#">
+                          Menu item
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* FORM SEARCH AND ADD */}
+              <div className={`row ${style.searchandadd}`}>
+                {/* FORM SEARCH */}
+                <div className={`col-10 ${style.formSearch}`}>
+                  <input
+                    type="text"
+                    className="form-control rounded-4"
+                    aria-describedby="emailHelp"
+                    placeholder="Type your message..."
+                  />
+                </div>
+                {/* BUTTON ADD */}
+                <div className={`col-2`}>
+                  <AddIcon
+                    sx={{
+                      color: "#6951AE",
+                      fontSize: "40px",
+                      marginLeft: "-10px",
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* BUTTON NAVIGATION */}
+              <div className={`row shadow-sm ${style.btnNav}`}>
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li className={`page-item text-center ${style.all}`}>
+                      <a className="page-link rounded-4" href="#">
+                        Important
+                      </a>
+                    </li>
+                    <li className={`page-item text-center ${style.Important}`}>
+                      <a className="page-link rounded-4" href="#">
+                        All
+                      </a>
+                    </li>
+                    <li className={`page-item text-center ${style.Unread}`}>
+                      <a className="page-link rounded-4" href="#">
+                        Unread
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+
+              {/* LIST CHAT */}
+              <List className={style.listChat}>
+                {[...new Array(15)].map((item, key) => (
+                  <ListItem
+                    alignItems="flex-start"
+                    button
+                    key={key}
+                    onClick={() => setIsClicked(true)}
+                  >
+                    <ListItemAvatar>
+                      <Avatar alt="Bilkis" src="/static/images/avatar/1.jpg" />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Theresa Webb"
+                      secondary={
+                        <Typography
+                          sx={{ display: "inline", color: "#6951AE" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          Why did you do that?
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+            {/* END OF CHAT LIST */}
+
+            {/* ROOM CHAT */}
+            <div className={`col-9 ${style.rightSide}`}>
+              {/* NO SELECTED */}
+              {!isClicked && (
+                <div className={`row ${style.noSelect}`}>
+                  <div
+                    className={`col-12 d-flex justify-content-center align-items-center`}
+                    style={{ height: "100vh" }}
+                  >
+                    <h5>Please select a chat to start messaging</h5>
+                  </div>
+                </div>
+              )}
+
+              {/* SELECTED */}
+              {isClicked && (
+                <React.Fragment>
+                  <div className={`row shadow-sm ${style.navbarChat}`}>
+                    {/* AVATAR */}
+                    <div className={`col-1`}>
+                      <ListItemAvatar>
+                        <Avatar
+                          alt="Bilkis"
+                          src="/static/images/avatar/1.jpg"
+                          className={style.avatar}
+                        />
+                      </ListItemAvatar>
+                    </div>
+                    {/* USERNAME & STATUS */}
+                    <div className={`col-4 ${style.usernameAndStatus}`}>
+                      <h5>Theresa Webb</h5>
+                      <p>Online</p>
+                    </div>
+                  </div>
+                  {/* BOX CHAT */}
+                  <div className={`row py-3 ${style.boxChat}`}>
+                    <div className={`col-12`}>
+                      {/* LEFT CHAT */}
+                      {[...new Array(5)].map((item, key) => (
+                        <Box mb={1} key={key}>
+                          <Grid container gap={2} alignItems="flex-end">
+                            <Grid item>
+                              <Avatar
+                                alt="Bilkis"
+                                src="/static/images/avatar/1.jpg"
+                              />
+                            </Grid>
+                            <Grid item md={3}>
+                              <Box
+                                sx={{
+                                  backgroundColor: "#FEA31B",
+                                  borderRadius: "25px 25px 25px 1px",
+                                  padding: 3,
+                                }}
+                              >
+                                <Typography sx={{ color: "#fff" }}>
+                                  Hi, son, how are you doing? Today, my fath
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      ))}
+
+                      {/* RIGHT CHAT */}
+                      <Box mb={2}>
+                        <Grid
+                          container
+                          gap={2}
+                          direction="row-reverse"
+                          alignItems="flex-end"
+                        >
+                          <Grid item>
+                            <Avatar
+                              alt="Bilkis"
+                              src="/static/images/avatar/1.jpg"
+                            />
+                          </Grid>
+                          <Grid item md={3}>
+                            <Box
+                              sx={{
+                                backgroundColor: "#6951AE",
+                                borderRadius: "25px 25px 1px 25px",
+                                padding: 3,
+                              }}
+                            >
+                              <Typography
+                                sx={{ color: "#fff", textAlign: "end" }}
+                              >
+                                Hi, son, how are you doing? bought a cool car.
+                              </Typography>
+                            </Box>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </div>
+                  </div>
+                  {/* FORM CHAT */}
+                  <div className={`row ${style.formChat}`}>
+                    <Box>
+                      <TextField
+                        className="py-2"
+                        id="outlined-basicS"
+                        placeholder="Type your message..."
+                        variant="outlined"
+                        fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="start">
+                              <SendRoundedIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                    </Box>
+                  </div>
+                </React.Fragment>
+              )}
+            </div>
+            {/* END OF ROOM CHAT */}
+          </div>
+        </section>
       </main>
     </>
-  )
+  );
 }
