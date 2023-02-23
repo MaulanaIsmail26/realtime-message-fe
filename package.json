@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.10",
     "@next/font": "13.1.6",
     "bootstrap": "^5.2.3",
     "eslint": "8.34.0",
