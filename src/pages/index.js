@@ -4,6 +4,8 @@ import Head from "next/head";
 import style from "@/styles/pages/homeStyle.module.scss";
 import AddIcon from "@mui/icons-material/Add";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   Grid,
   Typography,
@@ -31,7 +33,122 @@ export default function RoomChat() {
           {/* LEFT CARD */}
           <div className={`col-1`}>
             <div className={`shadow ${style.leftCard}`}>
-              <p>Maulana</p>
+              {/* ICON WHITE APP */}
+              <div className={`row ${style.iconWhiteApp}`}>
+                <div className={`col-12 d-flex justify-content-center`}>
+                  <img src="/images/icon-white-app.webp" alt="icon-app" />
+                </div>
+              </div>
+
+              {/* AVATAR USER */}
+              <div className={`row mt-3 ${style.avatar}`}>
+                <div
+                  className={`col-12 border-bottom pb-4 d-flex justify-content-center`}
+                >
+                  <Avatar
+                    alt="Maulana"
+                    src="/static/images/avatar/1.jpg"
+                    className={style.imgAvatar}
+                  />
+                </div>
+              </div>
+
+              {/* BUTTON Modal */}
+              <div className={`row mt-3 ${style.buttonModal}`}>
+                <div className={`col-12 d-flex justify-content-center`}>
+                  <button
+                    className="btn"
+                    type="button"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasExample"
+                    aria-controls="offcanvasExample"
+                  >
+                    <FormatAlignLeftIcon className={style.btn} />
+                  </button>
+
+                  <div
+                    className="offcanvas offcanvas-start"
+                    tabindex="-1"
+                    id="offcanvasExample"
+                    aria-labelledby="offcanvasExampleLabel"
+                    style={{ width: "250px", backgroundColor: "#0057f8" }}
+                  >
+                    <div className="offcanvas-header">
+                      <h5
+                        className="offcanvas-title"
+                        id="offcanvasExampleLabel"
+                        style={{ color: "white" }}
+                      >
+                        Menu Option
+                      </h5>
+                      <button
+                        type="button"
+                        className="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div className="offcanvas-body">
+                      <div className={`row ${style.btnSetting}`}>
+                        <div className={`col-3`}>
+                          <img src="/images/Settings.webp" alt="icon-app" />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Settings</h5>
+                        </div>
+                      </div>
+                      <div className={`row mt-4 ${style.btnContacts}`}>
+                        <div className={`col-3`}>
+                          <img src="/images/Contacts.webp" alt="icon-app" />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Contacts</h5>
+                        </div>
+                      </div>
+                      <div className={`row mt-4 ${style.btnCalls}`}>
+                        <div className={`col-3`}>
+                          <img src="/images/call.webp" alt="icon-app" />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Calls</h5>
+                        </div>
+                      </div>
+                      <div className={`row mt-4 ${style.btnSave}`}>
+                        <div className={`col-3`}>
+                          <img src="/images/save.webp" alt="icon-app" />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Save messages</h5>
+                        </div>
+                      </div>
+                      <div className={`row mt-4 ${style.btnInvite}`}>
+                        <div className={`col-3`}>
+                          <img src="/images/Invite.webp" alt="icon-app" />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Invite Friends</h5>
+                        </div>
+                      </div>
+                      <div className={`row mt-4 ${style.btnMessageFAQ}`}>
+                        <div className={`col-3`}>
+                          <img src="/images/FAQ.webp" alt="icon-app" />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Message FAQ</h5>
+                        </div>
+                      </div>
+                      <div className={`row ${style.btnLogOut}`}>
+                        <div className={`col-3`}>
+                          <LogoutIcon className={style.logout} />
+                        </div>
+                        <div className={`col-8`}>
+                          <h5>Log Out</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -44,7 +161,7 @@ export default function RoomChat() {
                   <img
                     // className="rounded-circle border border-1"
                     src="/images/icon-app.webp"
-                    alt="photo-profile"
+                    alt="icon-app"
                   />
                 </div>
                 <div className={`col-9 mt-1 ${style.nameApp}`}>
@@ -108,7 +225,7 @@ export default function RoomChat() {
                     onClick={() => setIsClicked(true)}
                   >
                     <ListItemAvatar>
-                      <Avatar alt="Bilkis" src="/static/images/avatar/1.jpg" />
+                      <Avatar alt="Theresa" src="/static/images/avatar/1.jpg" />
                     </ListItemAvatar>
                     <ListItemText
                       primary="Theresa Webb"
@@ -155,7 +272,7 @@ export default function RoomChat() {
                     <div className={`col-1 me-2`}>
                       <ListItemAvatar>
                         <Avatar
-                          alt="Bilkis"
+                          alt="Theresa"
                           src="/static/images/avatar/1.jpg"
                           className={style.avatar}
                         />
@@ -176,7 +293,7 @@ export default function RoomChat() {
                           <Grid container gap={2} alignItems="flex-end">
                             <Grid item>
                               <Avatar
-                                alt="Bilkis"
+                                alt="Theresa"
                                 src="/static/images/avatar/1.jpg"
                               />
                             </Grid>
@@ -202,7 +319,7 @@ export default function RoomChat() {
                         >
                           <Grid item>
                             <Avatar
-                              alt="Bilkis"
+                              alt="Theresa"
                               src="/static/images/avatar/1.jpg"
                             />
                           </Grid>
