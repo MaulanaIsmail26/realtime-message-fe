@@ -3,7 +3,84 @@
   background-color: #F5F6F8;
   overflow: hidden;
 
-  .leftCard,
+  .leftCard {
+    background-color: #0057f8;
+    border-radius: 18px;
+    height: 95vh;
+    padding-top: 15px;
+
+    .iconWhiteApp {
+      img {
+        width: 70px;
+      }
+    }
+
+    .avatar {
+      .imgAvatar {
+        width: 50px;
+        height: 50px;
+        border: 2px solid white;
+      }
+    }
+
+    .buttonModal {
+      .btn {
+        font-size: 35px;
+        color: white;
+      }
+
+      .btnSetting {
+        img {
+          margin-left: 13px;
+        }
+      }
+
+      .btnContacts {
+        img {
+          margin-left: 13px;
+        }
+      }
+
+      .btnCalls {
+        img {
+          margin-left: 11px;
+        }
+      }
+
+      .btnSave {
+        img {
+          margin-left: 16px;
+        }
+      }
+
+      .btnInvite {
+        img {
+          margin-left: 9px;
+        }
+      }
+
+      .btnMessageFAQ {
+        img {
+          margin-left: 13px;
+        }
+      }
+
+      .btnLogOut {
+        margin-top: 200px;
+
+        .logout {
+          font-size: 30px;
+          color: white;
+          margin-left: 13px;
+        }
+      }
+
+      h5 {
+        color: white;
+      }
+    }
+  }
+
   .midCard,
   .rightCard {
     border-radius: 18px;
