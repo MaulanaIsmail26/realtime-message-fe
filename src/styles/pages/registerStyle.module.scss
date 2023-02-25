@@ -1,6 +1,6 @@
 .main {
   .container {
-    background-color: #6951AE;
+    background-color: #0057f8;
     height: 100vh;
 
     .cardRegister {
@@ -14,7 +14,7 @@
   
       .title {
         h4 {
-          color: #6951AE;
+          color: #0057f8;
         }
       }
 
@@ -32,12 +32,12 @@
           font-size: 14px;
           border-color: #9EA0A5;
           border-radius: 8px;
-          caret-color: #6951AE;
+          caret-color: #0057f8;
         }
       
         input:focus {
           box-shadow: 0px 4px 10px 3px rgba(0, 0, 0, 0.11);
-          border-color: #6951AE;
+          border-color: #0057f8;
         }
       }
   
@@ -46,8 +46,8 @@
           width: 100%;
           padding: 10px 0;
           font-size: 15px;
-          background-color: #6951AE;
-          border-color: #6951AE;
+          background-color: #0057f8;
+          border-color: #0057f8;
           box-shadow: 5px 5px 10px #d9d9d9,
               -5px -5px 10px #e7e7e7;
         }
@@ -60,8 +60,8 @@
   
       .btnGoogle {
         button {
-          border-color: #6951AE;
-          color: #6951AE;
+          border-color: #0057f8;
+          color: #0057f8;
           width: 100%;
           font-size: 14px;
           font-weight: 500;
@@ -71,7 +71,7 @@
         }
   
         button:hover {
-          background-color: #6951AE;
+          background-color: #0057f8;
           color: white;
 
           img {
