@@ -16,9 +16,47 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Box } from "@mui/system";
+import { database } from "@/pages/utils/firebase";
+import { onValue, ref } from "firebase/database";
+import * as useDb from "@/pages/utils/database";
 
 export default function RoomChat() {
   const [isClicked, setIsClicked] = React.useState(false);
+  const [selectedChat, setSelectedChat] = React.useState(null);
+  const [keyword, setKeyword] = React.useState("");
+  const [messageList, setMessageList] = React.useState([])
+
+  React.useEffect(() => {
+    useDb.getData("users", (snapshot) => {
+      const data = snapshot.val();
+      // return data;
+
+      // updateStarCount(postElement, data);
+      // console.log(data);
+    });
+
+    useDb.getData("messages/user_1", (snapshot) => {
+      const data = snapshot.val();
+      // return data;
+
+      // updateStarCount(postElement, data);
+      setMessageList(data);
+    });
+  }, []);
+
+  const sendMessage = () => {
+    useDb.sendData("messages", {
+      ['user_1']: {
+        ...messageList,
+        [new Date().getTime()]: {
+          text: keyword,
+          image: "",
+          timeStamp: new Date().getTime(),
+        }
+      }
+    })
+    setKeyword("")
+  };
 
   return (
     <>
@@ -221,8 +259,12 @@ export default function RoomChat() {
                   <ListItem
                     alignItems="flex-start"
                     button
+                    selected={selectedChat === key}
                     key={key}
-                    onClick={() => setIsClicked(true)}
+                    onClick={() => {
+                      setIsClicked(true);
+                      setSelectedChat(key);
+                    }}
                   >
                     <ListItemAvatar>
                       <Avatar alt="Theresa" src="/static/images/avatar/1.jpg" />
@@ -284,6 +326,7 @@ export default function RoomChat() {
                       <p>Online</p>
                     </div>
                   </div>
+
                   {/* BOX CHAT */}
                   <div className={`row py-3 px-2 ${style.boxChat}`}>
                     <div className={`col-12`}>
@@ -336,6 +379,7 @@ export default function RoomChat() {
                       </Box>
                     </div>
                   </div>
+
                   {/* EMOTICON FORM CHAT AND BUTTON SEND*/}
                   <div
                     className={`row d-flex align-items-center ${style.bottomBoxChat}`}
@@ -351,6 +395,13 @@ export default function RoomChat() {
                         className="form-control rounded-4"
                         aria-describedby="emailHelp"
                         placeholder="Type your message..."
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            sendMessage();
+                          }
+                        }}
                       />
                     </div>
                   </div>
