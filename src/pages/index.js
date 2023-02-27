@@ -20,11 +20,14 @@ import { database } from "@/pages/utils/firebase";
 import { onValue, ref } from "firebase/database";
 import * as useDb from "@/pages/utils/database";
 
+const ID = new Date().getTime()
+
 export default function RoomChat() {
   const [isClicked, setIsClicked] = React.useState(false);
   const [selectedChat, setSelectedChat] = React.useState(null);
   const [keyword, setKeyword] = React.useState("");
-  const [messageList, setMessageList] = React.useState([])
+  const [messageList, setMessageList] = React.useState([]);
+  const [messageKey, setMessageKey] = React.useState([]);
 
   React.useEffect(() => {
     useDb.getData("users", (snapshot) => {
@@ -35,27 +38,33 @@ export default function RoomChat() {
       // console.log(data);
     });
 
-    useDb.getData("messages/user_1", (snapshot) => {
+    useDb.getData(`messages/user_1`, (snapshot) => {
       const data = snapshot.val();
       // return data;
 
       // updateStarCount(postElement, data);
-      setMessageList(data);
+      if (data) {
+        setMessageList(data);
+        setMessageKey(Object.keys(data));
+      }
     });
   }, []);
 
   const sendMessage = () => {
     useDb.sendData("messages", {
-      ['user_1']: {
+      [`user_1`]: {
         ...messageList,
         [new Date().getTime()]: {
           text: keyword,
           image: "",
           timeStamp: new Date().getTime(),
-        }
-      }
-    })
-    setKeyword("")
+          user_id:ID,
+          photo: "",
+          sender: "Maulana",
+        },
+      },
+    });
+    setKeyword("");
   };
 
   return (
@@ -331,52 +340,59 @@ export default function RoomChat() {
                   <div className={`row py-3 px-2 ${style.boxChat}`}>
                     <div className={`col-12`}>
                       {/* LEFT CHAT */}
-                      {[...new Array(5)].map((item, key) => (
-                        <Box mb={1} key={key} className="mt-3">
-                          <Grid container gap={2} alignItems="flex-end">
-                            <Grid item>
-                              <Avatar
-                                alt="Theresa"
-                                src="/static/images/avatar/1.jpg"
-                              />
-                            </Grid>
-                            <Grid item md={3}>
-                              <Box className={`shadow-sm ${style.boxLeft}`}>
-                                <Typography sx={{ color: "#fff" }}>
-                                  Hi, son, how are you doing? Today, my fath
-                                </Typography>
-                              </Box>
-                            </Grid>
-                          </Grid>
-                        </Box>
-                      ))}
-
-                      {/* RIGHT CHAT */}
-                      <Box mb={2}>
-                        <Grid
-                          container
-                          gap={2}
-                          direction="row-reverse"
-                          alignItems="flex-end"
-                          className="mt-3"
-                        >
-                          <Grid item>
-                            <Avatar
-                              alt="Theresa"
-                              src="/static/images/avatar/1.jpg"
-                            />
-                          </Grid>
-                          <Grid item md={3}>
-                            <Box className={`shadow-sm ${style.boxRight}`}>
-                              <Typography
-                                sx={{ color: "#fff", textAlign: "end" }}
+                      {messageKey.map((item, key) => {
+                        if (messageList[item]?.user_id === ID) {
+                          return (
+                            <Box mb={2} key={key}>
+                              <Grid
+                                container
+                                gap={2}
+                                direction="row-reverse"
+                                alignItems="flex-end"
+                                className="mt-3"
                               >
-                                Hi, son, how are you doing? bought a cool car.
-                              </Typography>
+                                <Grid item>
+                                  <Avatar
+                                    alt={messageList[item]?.sender}
+                                    src={messageList[item]?.photo}
+                                  />
+                                </Grid>
+                                <Grid item md={3}>
+                                  <Box
+                                    className={`shadow-sm ${style.boxRight}`}
+                                  >
+                                    <Typography
+                                      sx={{ color: "#fff", textAlign: "end" }}
+                                    >
+                                      {messageList[item]?.text}
+                                    </Typography>
+                                  </Box>
+                                </Grid>
+                              </Grid>
                             </Box>
-                          </Grid>
-                        </Grid>
-                      </Box>
+                          );
+                        } else {
+                          return (
+                            <Box mb={1} key={key} className="mt-3">
+                              <Grid container gap={2} alignItems="flex-end">
+                                <Grid item>
+                                  <Avatar
+                                    alt={messageList[item]?.sender}
+                                    src={messageList[item]?.photo}
+                                  />
+                                </Grid>
+                                <Grid item md={3}>
+                                  <Box className={`shadow-sm ${style.boxLeft}`}>
+                                    <Typography sx={{ color: "#fff" }}>
+                                      {messageList[item]?.text}
+                                    </Typography>
+                                  </Box>
+                                </Grid>
+                              </Grid>
+                            </Box>
+                          );
+                        }
+                      })}
                     </div>
                   </div>
 
