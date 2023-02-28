@@ -30,36 +30,42 @@
       }
 
       .btnSetting {
+        cursor: pointer;
         img {
           margin-left: 13px;
         }
       }
 
       .btnContacts {
+        cursor: pointer;
         img {
           margin-left: 13px;
         }
       }
 
       .btnCalls {
+        cursor: pointer;
         img {
           margin-left: 11px;
         }
       }
 
       .btnSave {
+        cursor: pointer;
         img {
           margin-left: 16px;
         }
       }
 
       .btnInvite {
+        cursor: pointer;
         img {
           margin-left: 9px;
         }
       }
 
       .btnMessageFAQ {
+        cursor: pointer;
         img {
           margin-left: 13px;
         }
@@ -67,6 +73,7 @@
 
       .btnLogOut {
         margin-top: 200px;
+        cursor: pointer;
 
         .logout {
           font-size: 30px;

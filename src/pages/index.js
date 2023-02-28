@@ -276,10 +276,10 @@ export default function RoomChat() {
                     }}
                   >
                     <ListItemAvatar>
-                      <Avatar alt="Theresa" src="/static/images/avatar/1.jpg" />
+                      <Avatar alt="Maulana" src="/static/images/avatar/1.jpg" />
                     </ListItemAvatar>
                     <ListItemText
-                      primary="Theresa Webb"
+                      primary="Maulana Ismail"
                       secondary={
                         <Typography
                           sx={{ display: "inline", color: "#0057f8" }}
@@ -287,7 +287,7 @@ export default function RoomChat() {
                           variant="body2"
                           color="text.primary"
                         >
-                          Why did you do that?
+                          Online
                         </Typography>
                       }
                     />
@@ -323,7 +323,7 @@ export default function RoomChat() {
                     <div className={`col-1 me-2`}>
                       <ListItemAvatar>
                         <Avatar
-                          alt="Theresa"
+                          alt="Maulana"
                           src="/static/images/avatar/1.jpg"
                           className={style.avatar}
                         />
@@ -331,7 +331,7 @@ export default function RoomChat() {
                     </div>
                     {/* USERNAME & STATUS */}
                     <div className={`col-4 ${style.usernameAndStatus}`}>
-                      <h5>Theresa Webb</h5>
+                      <h5>Maulana Ismail</h5>
                       <p>Online</p>
                     </div>
                   </div>
