@@ -20,7 +20,7 @@ import { database } from "@/pages/utils/firebase";
 import { onValue, ref } from "firebase/database";
 import * as useDb from "@/pages/utils/database";
 
-const ID = new Date().getTime()
+const ID = new Date().getTime();
 
 export default function RoomChat() {
   const [isClicked, setIsClicked] = React.useState(false);
@@ -28,6 +28,9 @@ export default function RoomChat() {
   const [keyword, setKeyword] = React.useState("");
   const [messageList, setMessageList] = React.useState([]);
   const [messageKey, setMessageKey] = React.useState([]);
+  const [messageFilter, setMessageFilter] = React.useState([]);
+  const [usersList, setUsersList] = React.useState([]);
+  const [usersKey, setUsersKey] = React.useState([]);
 
   React.useEffect(() => {
     useDb.getData("users", (snapshot) => {
@@ -36,16 +39,22 @@ export default function RoomChat() {
 
       // updateStarCount(postElement, data);
       // console.log(data);
+      if (data) {
+        setUsersList(data);
+        setUsersKey(Object.keys(data));
+      }
     });
 
     useDb.getData(`messages/user_1`, (snapshot) => {
       const data = snapshot.val();
-      // return data;
 
-      // updateStarCount(postElement, data);
       if (data) {
         setMessageList(data);
         setMessageKey(Object.keys(data));
+
+        // if (isClicked) {
+        //   bottomRef.current.scrollIntoView({behavior: "smooth"})
+        // }
       }
     });
   }, []);
@@ -58,14 +67,22 @@ export default function RoomChat() {
           text: keyword,
           image: "",
           timeStamp: new Date().getTime(),
-          user_id:ID,
+          user_id: ID,
           photo: "",
           sender: "Maulana",
+          target_id: selectedChat,
         },
       },
     });
+    const filterChat = messageKey.map((item) => messageList[item]);
+
+    setMessageFilter(
+      filterChat.filter((item) => item.target_id === selectedChat)
+    );
     setKeyword("");
   };
+
+  console.log(messageFilter);
 
   return (
     <>
@@ -264,7 +281,7 @@ export default function RoomChat() {
               </div>
               {/* LIST CHAT */}
               <List className={style.listChat}>
-                {[...new Array(15)].map((item, key) => (
+                {usersKey.map((item, key) => (
                   <ListItem
                     alignItems="flex-start"
                     button
@@ -272,14 +289,27 @@ export default function RoomChat() {
                     key={key}
                     onClick={() => {
                       setIsClicked(true);
-                      setSelectedChat(key);
+                      setSelectedChat(usersList[item]?.user_id);
+                      const filterChat = messageKey.map(
+                        (item) => messageList[item]
+                      );
+                      const selected_id = usersList[item]?.user_id;
+
+                      setMessageFilter(
+                        filterChat.filter(
+                          (item) => item.target_id === selected_id
+                        )
+                      );
                     }}
                   >
                     <ListItemAvatar>
-                      <Avatar alt="Maulana" src="/static/images/avatar/1.jpg" />
+                      <Avatar
+                        alt={usersList[item]?.name}
+                        src={usersList[item]?.photo}
+                      />
                     </ListItemAvatar>
                     <ListItemText
-                      primary="Maulana Ismail"
+                      primary={usersList[item]?.name}
                       secondary={
                         <Typography
                           sx={{ display: "inline", color: "#0057f8" }}
@@ -323,15 +353,15 @@ export default function RoomChat() {
                     <div className={`col-1 me-2`}>
                       <ListItemAvatar>
                         <Avatar
-                          alt="Maulana"
-                          src="/static/images/avatar/1.jpg"
+                          alt={usersList[selectedChat]?.name}
+                          src={usersList[selectedChat]?.photo}
                           className={style.avatar}
                         />
                       </ListItemAvatar>
                     </div>
                     {/* USERNAME & STATUS */}
                     <div className={`col-4 ${style.usernameAndStatus}`}>
-                      <h5>Maulana Ismail</h5>
+                      <h5>{usersList[selectedChat]?.name}</h5>
                       <p>Online</p>
                     </div>
                   </div>
@@ -340,8 +370,8 @@ export default function RoomChat() {
                   <div className={`row py-3 px-2 ${style.boxChat}`}>
                     <div className={`col-12`}>
                       {/* LEFT CHAT */}
-                      {messageKey.map((item, key) => {
-                        if (messageList[item]?.user_id === ID) {
+                      {messageFilter.map((item, key) => {
+                        if (item?.user_id === ID) {
                           return (
                             <Box mb={2} key={key}>
                               <Grid
@@ -353,8 +383,8 @@ export default function RoomChat() {
                               >
                                 <Grid item>
                                   <Avatar
-                                    alt={messageList[item]?.sender}
-                                    src={messageList[item]?.photo}
+                                    alt={item?.sender}
+                                    src={item?.photo}
                                   />
                                 </Grid>
                                 <Grid item md={3}>
@@ -364,7 +394,7 @@ export default function RoomChat() {
                                     <Typography
                                       sx={{ color: "#fff", textAlign: "end" }}
                                     >
-                                      {messageList[item]?.text}
+                                      {item?.text}
                                     </Typography>
                                   </Box>
                                 </Grid>
@@ -377,14 +407,14 @@ export default function RoomChat() {
                               <Grid container gap={2} alignItems="flex-end">
                                 <Grid item>
                                   <Avatar
-                                    alt={messageList[item]?.sender}
-                                    src={messageList[item]?.photo}
+                                    alt={item?.sender}
+                                    src={item?.photo}
                                   />
                                 </Grid>
                                 <Grid item md={3}>
                                   <Box className={`shadow-sm ${style.boxLeft}`}>
                                     <Typography sx={{ color: "#fff" }}>
-                                      {messageList[item]?.text}
+                                      {item?.text}
                                     </Typography>
                                   </Box>
                                 </Grid>

@@ -8,12 +8,24 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth } from "@/pages/utils/firebase";
+import * as useDb from "@/pages/utils/database";
 const provider = new GoogleAuthProvider();
 
 export default function Register() {
-const [name, setName] = React.useState("")
-const [email, setEmail] = React.useState("")
-const [password, setPassword] = React.useState("")
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [usersList, setUsersList] = React.useState([]);
+
+  React.useEffect(() => {
+    useDb.getData("users", (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        setUsersList(data);
+      }
+    });
+  }, []);
 
   // REGISTER MANUAL
   const registerManual = () => {
@@ -21,12 +33,23 @@ const [password, setPassword] = React.useState("")
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // ...
+
+        // console.log(user);
+        useDb.sendData("users", {
+          ...usersList,
+          [user.uid]: {
+            emailVerified: user.emailVerified,
+            timeStamp: new Date().getTime(),
+            user_id: user.uid,
+            photo: "/notfound.jpg",
+            name: name,
+            isOnline: false,
+          },
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        // ..
       });
   };
 
@@ -34,13 +57,20 @@ const [password, setPassword] = React.useState("")
   const registerGoogle = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+
+        // console.log(result);
+        useDb.sendData("users", {
+          ...usersList,
+          [user.uid]: {
+            emailVerified: user.emailVerified,
+            timeStamp: new Date().getTime(),
+            user_id: user.uid,
+            photo: user.photoURL,
+            name: user.displayName,
+          },
+        });
       })
       .catch((error) => {
         // Handle Errors here.
