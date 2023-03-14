@@ -69,6 +69,7 @@ export default function Register() {
             user_id: user.uid,
             photo: user.photoURL,
             name: user.displayName,
+            isOnline: false,
           },
         });
       })
