@@ -19,10 +19,12 @@ import { Box } from "@mui/system";
 import { database } from "@/pages/utils/firebase";
 import { onValue, ref } from "firebase/database";
 import * as useDb from "@/pages/utils/database";
+import EmojiPicker from "emoji-picker-react";
 
 const ID = new Date().getTime();
 
 export default function RoomChat() {
+  const [uid, setUid] = React.useState("");
   const [isClicked, setIsClicked] = React.useState(false);
   const [selectedChat, setSelectedChat] = React.useState(null);
   const [keyword, setKeyword] = React.useState("");
@@ -31,20 +33,22 @@ export default function RoomChat() {
   const [messageFilter, setMessageFilter] = React.useState([]);
   const [usersList, setUsersList] = React.useState([]);
   const [usersKey, setUsersKey] = React.useState([]);
+  const [isEmojiClicked, setIsEmojiClicked] = React.useState(false);
 
   React.useEffect(() => {
+    const uidProfile = JSON.parse(localStorage.getItem("user"))?.uid;
+    setUid(uidProfile);
+
     useDb.getData("users", (snapshot) => {
       const data = snapshot.val();
-      // return data;
 
-      // updateStarCount(postElement, data);
-      // console.log(data);
       if (data) {
         setUsersList(data);
-        setUsersKey(Object.keys(data));
+        setUsersKey(Object.keys(data)?.filter((item) => item !== uidProfile));
       }
     });
 
+    // user_${uid}_${selectedChat}
     useDb.getData(`messages/user_1`, (snapshot) => {
       const data = snapshot.val();
 
@@ -57,7 +61,7 @@ export default function RoomChat() {
         // }
       }
     });
-  }, []);
+  }, [selectedChat]);
 
   const sendMessage = () => {
     useDb.sendData("messages", {
@@ -67,18 +71,28 @@ export default function RoomChat() {
           text: keyword,
           image: "",
           timeStamp: new Date().getTime(),
-          user_id: ID,
+          user_id: uid,
           photo: "",
           sender: "Maulana",
           target_id: selectedChat,
         },
       },
     });
-    const filterChat = messageKey.map((item) => messageList[item]);
 
-    setMessageFilter(
-      filterChat.filter((item) => item.target_id === selectedChat)
-    );
+    // user_${uid}_${selectedChat}
+    useDb.getData(`messages/user_1`, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        const filterChat = Object.keys(data).map((item) => data[item]);
+
+        setMessageFilter(
+          filterChat.filter(
+            (item) => item.target_id === selectedChat || item.target_id === uid
+          )
+        );
+      }
+    });
     setKeyword("");
   };
 
@@ -297,9 +311,23 @@ export default function RoomChat() {
 
                       setMessageFilter(
                         filterChat.filter(
-                          (item) => item.target_id === selected_id
+                          (item) =>
+                            item.target_id === selected_id ||
+                            item.target_id === uid
                         )
                       );
+
+                      // useDb.getData(
+                      //   `messages/user_${selected_id}_${uid}`,
+                      //   (snapshot) => {
+                      //     const data = snapshot.val();
+
+                      //     if (data) {
+                      //       setMessageList(data);
+                      //       setMessageKey(Object.keys(data));
+                      //     }
+                      //   }
+                      // );
                     }}
                   >
                     <ListItemAvatar>
@@ -317,7 +345,7 @@ export default function RoomChat() {
                           variant="body2"
                           color="text.primary"
                         >
-                          Online
+                          {usersList[item]?.isOnline ? "Online" : "Offline"}
                         </Typography>
                       }
                     />
@@ -362,7 +390,11 @@ export default function RoomChat() {
                     {/* USERNAME & STATUS */}
                     <div className={`col-4 ${style.usernameAndStatus}`}>
                       <h5>{usersList[selectedChat]?.name}</h5>
-                      <p>Online</p>
+                      <p>
+                        {usersList[selectedChat]?.isOnline
+                          ? "Online"
+                          : "Offline"}
+                      </p>
                     </div>
                   </div>
 
@@ -371,7 +403,7 @@ export default function RoomChat() {
                     <div className={`col-12`}>
                       {/* LEFT CHAT */}
                       {messageFilter.map((item, key) => {
-                        if (item?.user_id === ID) {
+                        if (item?.user_id === uid) {
                           return (
                             <Box mb={2} key={key}>
                               <Grid
@@ -431,8 +463,28 @@ export default function RoomChat() {
                     className={`row d-flex align-items-center ${style.bottomBoxChat}`}
                   >
                     {/* EMOJI */}
-                    <div className={`col-1`} style={{ width: "45px" }}>
-                      <EmojiEmotionsIcon className={style.emoji} />
+                    <div className={`col-1`} style={{ width: "50px" }}>
+                      <EmojiEmotionsIcon
+                        className={style.btnEmoji}
+                        onClick={() => {
+                          if (isEmojiClicked === false) {
+                            setIsEmojiClicked(true);
+                          } else {
+                            setIsEmojiClicked(false);
+                          }
+                        }}
+                      />
+                      {isEmojiClicked && (
+                        <div className={`${style.emoji}`}>
+                          <EmojiPicker
+                            onEmojiClick={(e) => {
+                              setKeyword(`${keyword}${e.emoji}`);
+                            }}
+                            height="70vh"
+                            width="20em"
+                          />
+                        </div>
+                      )}
                     </div>
                     {/* FORM MESSAGE AND BUTTON SEND */}
                     <div className={`col-11 ${style.formMessage}`}>
@@ -446,6 +498,7 @@ export default function RoomChat() {
                         onKeyDown={(e) => {
                           if (e.key === "Enter") {
                             sendMessage();
+                            setIsEmojiClicked(false);
                           }
                         }}
                       />

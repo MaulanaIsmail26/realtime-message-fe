@@ -3,8 +3,89 @@ import React from "react";
 import Head from "next/head";
 import style from "@/styles/pages/loginStyle.module.scss";
 import Link from "next/link";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth } from "@/pages/utils/firebase";
+import * as useDb from "@/pages/utils/database";
+const provider = new GoogleAuthProvider();
 
 export default function Login() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [usersList, setUsersList] = React.useState([]);
+
+  React.useEffect(() => {
+    useDb.getData("users", (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        setUsersList(data);
+      }
+    });
+  }, []);
+
+  // LOGIN MANUAL
+  const loginManual = () => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        // console.log(user);
+
+        useDb.sendData("users", {
+          ...usersList,
+          [user.uid]: {
+            ...usersList[user.uid],
+            ...{
+              isOnline: true,
+            },
+          },
+        });
+
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
+  };
+
+  // LOGIN WITH GOOGLE
+  const loginGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // The signed-in user info.
+        const user = result.user;
+        // console.log(result);
+
+        useDb.sendData("users", {
+          ...usersList,
+          [user.uid]: {
+            ...usersList[user.uid],
+            ...{
+              isOnline: true,
+            },
+          },
+        });
+
+        localStorage.setItem("user", JSON.stringify(user));
+      })
+      .catch((error) => {
+        // Handle Errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // The email of the user's account used.
+        const email = error.customData.email;
+        // The AuthCredential type that was used.
+        const credential = GoogleAuthProvider.credentialFromError(error);
+        // ...
+      });
+  };
+
   return (
     <>
       <Head>
@@ -38,7 +119,7 @@ export default function Login() {
                     className="form-control"
                     id="email"
                     aria-describedby="emailHelp"
-                    // onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div className="mb-3">
@@ -50,7 +131,7 @@ export default function Login() {
                     className="form-control"
                     id="phone"
                     aria-describedby="emailHelp"
-                    // onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <Link href={""} className={`${style.forgotPass}`}>
@@ -60,7 +141,11 @@ export default function Login() {
             </div>
             {/* BUTTON LOGIN */}
             <div className={`mb-3 ${style.btnLogin}`}>
-              <button type="button" className="btn btn-primary rounded-pill">
+              <button
+                type="button"
+                className="btn btn-primary rounded-pill"
+                onClick={loginManual}
+              >
                 Login
               </button>
             </div>
@@ -73,6 +158,7 @@ export default function Login() {
               <button
                 type="button"
                 className="btn btn-outline-primary rounded-pill d-flex align-items-center justify-content-center"
+                onClick={loginGoogle}
               >
                 <img
                   className={`me-2 ${style.iconGoogle}`}

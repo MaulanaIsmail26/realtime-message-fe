@@ -221,10 +221,16 @@
     .bottomBoxChat {
       height: 50px;
 
-      .emoji {
+      .btnEmoji {
+        width: 50px;
         font-size: 35px;
         color: #0057f8;
         cursor: pointer;
+      }
+
+      .emoji {
+        position: fixed;
+        bottom: 11vh;
       }
 
       .formMessage {
