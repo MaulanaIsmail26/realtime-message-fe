@@ -19,6 +19,16 @@ export default function Login() {
   const [password, setPassword] = React.useState("");
   const [usersList, setUsersList] = React.useState([]);
 
+  // CHECK IS ALREADY LOGIN
+  React.useEffect(() => {
+    const isLogin = localStorage.getItem("isLogin");
+    const token = localStorage.getItem("token");
+
+    if (isLogin && token) {
+      router.replace("/");
+    }
+  }, []);
+
   React.useEffect(() => {
     useDb.getData("users", (snapshot) => {
       const data = snapshot.val();
