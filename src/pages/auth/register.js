@@ -13,11 +13,21 @@ import { useRouter } from "next/router";
 const provider = new GoogleAuthProvider();
 
 export default function Register() {
-  const router = useRouter()
+  const router = useRouter();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [usersList, setUsersList] = React.useState([]);
+
+  // CHECK IS ALREADY LOGIN
+  React.useEffect(() => {
+    const isLogin = localStorage.getItem("isLogin");
+    const token = localStorage.getItem("token");
+
+    if (isLogin && token) {
+      router.replace("/");
+    }
+  }, []);
 
   React.useEffect(() => {
     useDb.getData("users", (snapshot) => {
