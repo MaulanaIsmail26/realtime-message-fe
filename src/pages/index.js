@@ -20,10 +20,12 @@ import { database } from "@/pages/utils/firebase";
 import { onValue, ref } from "firebase/database";
 import * as useDb from "@/pages/utils/database";
 import EmojiPicker from "emoji-picker-react";
+import { useRouter } from "next/router";
 
 const ID = new Date().getTime();
 
 export default function RoomChat() {
+  const router = useRouter();
   const [uid, setUid] = React.useState("");
   const [isClicked, setIsClicked] = React.useState(false);
   const [selectedChat, setSelectedChat] = React.useState(null);
@@ -34,6 +36,15 @@ export default function RoomChat() {
   const [usersList, setUsersList] = React.useState([]);
   const [usersKey, setUsersKey] = React.useState([]);
   const [isEmojiClicked, setIsEmojiClicked] = React.useState(false);
+
+  // check if already login
+  React.useEffect(() => {
+    const isLogin = localStorage.getItem("user");
+
+    if (!isLogin) {
+      router.replace("/auth/login");
+    }
+  });
 
   React.useEffect(() => {
     const uidProfile = JSON.parse(localStorage.getItem("user"))?.uid;
