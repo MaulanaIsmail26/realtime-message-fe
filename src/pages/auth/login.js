@@ -21,10 +21,9 @@ export default function Login() {
 
   // CHECK IS ALREADY LOGIN
   React.useEffect(() => {
-    const isLogin = localStorage.getItem("isLogin");
-    const token = localStorage.getItem("token");
+    const isLogin = localStorage.getItem("user");
 
-    if (isLogin && token) {
+    if (isLogin) {
       router.replace("/");
     }
   }, []);
