@@ -9,9 +9,11 @@ import {
 } from "firebase/auth";
 import { auth } from "@/pages/utils/firebase";
 import * as useDb from "@/pages/utils/database";
+import { useRouter } from "next/router";
 const provider = new GoogleAuthProvider();
 
 export default function Register() {
+  const router = useRouter()
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -46,6 +48,7 @@ export default function Register() {
             isOnline: false,
           },
         });
+        router.replace("/auth/login");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -72,6 +75,7 @@ export default function Register() {
             isOnline: false,
           },
         });
+        router.replace("/auth/login");
       })
       .catch((error) => {
         // Handle Errors here.
