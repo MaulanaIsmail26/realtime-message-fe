@@ -9,8 +9,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
-import { auth } from "@/pages/utils/firebase";
-import * as useDb from "@/pages/utils/database";
+import { auth } from "@/utils/firebase";
+import * as useDb from "@/utils/database";
 import { useRouter } from "next/router";
 const provider = new GoogleAuthProvider();
 
