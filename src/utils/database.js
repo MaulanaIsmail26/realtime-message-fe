@@ -1,5 +1,5 @@
 import { onValue, ref, set } from "firebase/database";
-import { database } from "@/pages/utils/firebase";
+import { database } from "@/utils/firebase";
 
 export const getData = (table, cb) => {
   const db = database;
@@ -8,10 +8,9 @@ export const getData = (table, cb) => {
   return onValue(starCountRef, cb);
 };
 
-
 export const sendData = (table, cb) => {
   const db = database;
   const Ref = ref(db, table);
 
   return set(Ref, cb);
-}
+};

@@ -16,9 +16,9 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { database } from "@/pages/utils/firebase";
+import { database } from "@/utils/firebase";
 import { onValue, ref } from "firebase/database";
-import * as useDb from "@/pages/utils/database";
+import * as useDb from "@/utils/database";
 import EmojiPicker from "emoji-picker-react";
 import { useRouter } from "next/router";
 
