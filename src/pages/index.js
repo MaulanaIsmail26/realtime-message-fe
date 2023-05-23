@@ -107,8 +107,6 @@ export default function RoomChat() {
     setKeyword("");
   };
 
-  console.log(messageFilter);
-
   const logout = () => {
     setTimeout(() => {
       localStorage.clear();
