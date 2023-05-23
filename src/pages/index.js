@@ -109,6 +109,13 @@ export default function RoomChat() {
 
   console.log(messageFilter);
 
+  const logout = () => {
+    setTimeout(() => {
+      localStorage.clear();
+      router.replace("/auth/login");
+    }, 1500);
+  };
+
   return (
     <>
       <Head>
@@ -226,7 +233,12 @@ export default function RoomChat() {
                           <h5>Message FAQ</h5>
                         </div>
                       </div>
-                      <div className={`row ${style.btnLogOut}`}>
+                      <div
+                        className={`row ${style.btnLogOut}`}
+                        onClick={() => {
+                          logout();
+                        }}
+                      >
                         <div className={`col-3`}>
                           <LogoutIcon className={style.logout} />
                         </div>
